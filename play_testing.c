@@ -8,7 +8,8 @@ int main(){
     while(1){
         uint8 User_Input,i=1;
         int id,year,Entries;
-        int subjects[3],grades[3],list[10];
+        int subjects[3],grades[3];
+        uint8* list;
         uint8 count;
         uint8* ptr;
         User_Input=choice();
@@ -19,7 +20,7 @@ int main(){
                 return 0;
                 break; //no need for this break 
             case 1:
-                if(SDB_IsFull==true){
+                if(SDB_IsFull()==true){
                     printf("Yes it is full\n");
                 }
                 else{
@@ -45,7 +46,7 @@ int main(){
                     scanf("%d",&grades[i]);
                 }
                 printf("%d\n\n\n",id);
-                flag=SDB_AddEntry((uint8)id,(uint8)year,&subjects,&grades);
+                flag=SDB_AddEntry((uint8)id,(uint8)year,(uint8*) &subjects,(uint8*) &grades);
                 }
                 printf("Entry added successfully :D \n \n");
                 break;
@@ -55,12 +56,12 @@ int main(){
                 SDB_DeleteEntry(id);
                 printf("Deleted succesfully \n");
                 break;
-            case 5: //read entry // always read last input
+            case 5: //read entry 
                 printf("Please enter id to read");
                 scanf("%d",&id);
-                flag=SDB_ReadEntry((uint8) id,(uint8) &year,(uint8) &subjects,(uint8) &grades);
+                flag=SDB_ReadEntry((uint8) id,(uint8*) &year,(uint8*) &subjects,(uint8*) &grades);
                 if (flag==1){
-                    printf("The student year is %d/n ",year);
+                    printf("The student year is %d\n ",year);
                     printf("Here a list of courses and grades \n \n");
                     for(i=0;i<3;i++){
                         printf("%d\t",*(subjects+i));
@@ -72,11 +73,11 @@ int main(){
                 break;
 
             case 6: //get id list
-                SDB_GetIdList(&count,&list);
+                SDB_GetIdList((uint8*)&count,(uint8*)& list);
                 printf("the number of entries is %d",count);
                 printf("here's a list of ids :");
-                for(i=0;i<count;i++){
-                    printf("%d",list[i]);
+                for(uint8 i=0;i<count;i++){
+                    printf("%d",*(list+i));
                 }
                 break;
 
@@ -85,7 +86,7 @@ int main(){
                 scanf("%d",&id);
                 flag=SDB_IsIdExist(id);
                 if (flag==1){
-                    printf("the id exists");
+                    printf("the id exists \n");
                 }
                 else{
                     printf("Not found");
@@ -98,7 +99,7 @@ int main(){
 
 int choice(void){
    int i=0;
-        uint8 choice;
+        int choice;
         while(choice<1 || choice>7){
         printf("To Check if the database is full :\t 1\n");
         printf("To get the number of entries in the database :\t 2\n");
@@ -123,5 +124,3 @@ int choice(void){
         }
     return 0;
 }
-
-////// TYPECAST ALL THESE FUCKING UINT8
