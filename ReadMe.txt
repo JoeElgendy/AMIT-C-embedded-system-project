@@ -1,3 +1,6 @@
+PLEASE READ THIS FILE
+
+
 This is a description of the project code 
 
 The project consist of two files the first one is header and the second one is the main 
